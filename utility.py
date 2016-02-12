@@ -4,14 +4,14 @@ new functionaility in the app. """
 
 
 @on_main_thread
-def setBadgeString(s):
+def setBadgeString(badgestring):
     """Set the badge on the app icon to be a certain string"""
-	app.setApplicationBadgeString_(s)
+	app.setApplicationBadgeString_(badgestring)
 
 @on_main_thread
-def setBadgeNumber(i):
+def setBadgeNumber(num):
 	"""Set the badge on the app icon to be a certain number"""
-	app.setApplicationIconBadgeNumber_(i)
+	app.setApplicationIconBadgeNumber_(num)
 
 @on_main_thread
 def clearBadge():
@@ -21,10 +21,10 @@ def clearBadge():
 
 
 @on_main_thread
-def openURL(s):
+def openURL(url):
 	"""Open a url in a way that works through appex. This is useful for using
 	URL schemes to open other apps with data gained from appex."""
-	app._openURL_(nsurl(s))
+	app._openURL_(nsurl(url))
 
 @on_main_thread
 def getConsoleFont():
