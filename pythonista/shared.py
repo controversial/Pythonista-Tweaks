@@ -25,6 +25,8 @@ __all__ = {
 	"ui", 
 	"weakref",
 }
+__all__ = list(__all__)
+__all__.sort()
 
 NSDataDetector = ObjCClass("NSDataDetector")
 NSURLRequest = ObjCClass("NSURLRequest")
