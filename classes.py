@@ -68,14 +68,9 @@ class WebTab(Tab):
 	@on_main_thread
 	def makeSelf(self):
 		self.name = 'WebTab'
-		biA = ButtonItem(self, image = 'Action', action ='wtShare')
-		self.right_button_items.append(biA)
-		biF = ButtonItem(self, image = 'Forward', action ='wtGoForward')
-		self.right_button_items.append(biF)
-		biB = ButtonItem(self, image = 'Back', action = 'wtGoBack')
-		self.right_button_items.append(biB)
-		sb = SearchBar(self)
-		self.newVC.navigationItem().titleView = sb
+		self.right_button_items = [ButtonItem(self, image=image, action=action) for image, action
+			in (('Action', 'wtShare'), (Forward', 'wtGoForward'), ('Back', 'wtGoBack'))]
+		self.newVC.navigationItem().titleView = SearchBar(self)
 		wv = WebView(self)
 		wv.loadRequest_(NSURLRequest.requestWithURL_(nsurl('http://www.google.com')))
 		self.newVC.view = wv
@@ -90,16 +85,13 @@ def wtShare(_self, _cmd):
 	view = ObjCInstance(_self).view()
 	url = view.URL()
 	if url:
-		url_str = str(url.absoluteString())
-		dialogs.share_url(url_str)
+		dialogs.share_url(str(url.absoluteString()))
 
 def wtGoBack(_self, _cmd):
-	view = ObjCInstance(_self).view()
-	view.goBack()
+	ObjCInstance(_self).view().goBack()
 
 def wtGoForward(_self, _cmd):
-	view = ObjCInstance(_self).view()
-	view.goForward()
+	ObjCInstance(_self).view().goForward()
 
 def searchBarSearchButtonClicked_(_self, _cmd, _sb):
 	searchbar = ObjCInstance(_sb)
