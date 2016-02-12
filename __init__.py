@@ -10,38 +10,17 @@ Credits:
 
 - based on examples by @omz, @JonB, @Webmaster4o, etc
 '''
-
-# Imports
-from objc_util import *
-import dialogs
-import urllib
-
-# Global variables
-NSUserDefaults = ObjCClass('NSUserDefaults')
-WKWebView = ObjCClass('WKWebView')
-NSURLRequest = ObjCClass('NSURLRequest')
-UIBarButtonItem = ObjCClass('UIBarButtonItem')
-UISearchBar = ObjCClass('UISearchBar')
-NSDataDetector = ObjCClass('NSDataDetector')
-
-app = UIApplication.sharedApplication()
-rootVC = app.keyWindow().rootViewController()
-tabVC = rootVC.detailViewController()
-consoleVC = app.delegate().consoleViewController()
-userDefaults = NSUserDefaults.standardUserDefaults()
-
-
-
-# Core functionality
-from utility import *
-from classes import *
-
+import globals
+import app
+import localconsole as console
+import localeditor as editor
 
 if __name__ == "__main__":
-	#setBadgeString('test')
-	#setBadgeNumber(1)
-	#openURL('pythonita://')
-	#print getConsoleFont()
-	#print getDefaultFont()
-	Tab().present()
-	WebTab().present()
+	app.setBadgeString('test')
+	app.setBadgeNumber(1)
+	app.clearBadge()
+	app.openURL('pythonita://')
+	print console.getConsoleFont()
+	print console.getDefaultFont()
+	editor.Tab().present()
+	editor.WebTab().present()
