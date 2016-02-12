@@ -1,3 +1,5 @@
+import pythonista.editor
+
 if __name__ == "__main__":
-	Tab().present()
-	WebTab().present()
+	pythonista.editor.Tab().present()
+	pythonista.editor.WebTab().present()

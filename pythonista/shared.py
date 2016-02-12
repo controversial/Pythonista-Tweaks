@@ -1,7 +1,7 @@
 import objc_util
 from objc_util import *
 
-__all__ = [
+__all__ = {
 	"NSDataDetector",
 	"NSURLRequest",
 	"NSUserDefaults",
@@ -13,8 +13,18 @@ __all__ = [
 	"rootVC",
 	"tabVC",
 	"userDefaults",
-] + objc_util.__all__
-__all__.sort()
+} | {name for name in dir(objc_util) if not name.startswith("_")} - {
+	"ctypes",
+	"inspect",
+	"itertools",
+	"os",
+	"pp",
+	"re",
+	"string",
+	"sys",
+	"ui", 
+	"weakref",
+}
 
 NSDataDetector = ObjCClass("NSDataDetector")
 NSURLRequest = ObjCClass("NSURLRequest")

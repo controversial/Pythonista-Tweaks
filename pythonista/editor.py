@@ -4,6 +4,7 @@ import dialogs
 import urllib
 
 from . import shared
+from .shared import on_main_thread
 
 __all__ = [
 	"Button",
@@ -30,7 +31,7 @@ def ButtonItem(s, image, action):
 	return (
 		shared.UIBarButtonItem
 		.alloc()
-		.initWithImage_style_target_action_(UIImage.imageNamed_(image), 0, s.newVC, sel(action))
+		.initWithImage_style_target_action_(shared.UIImage.imageNamed_(image), 0, s.newVC, shared.sel(action))
 	)
 
 @on_main_thread
@@ -84,7 +85,7 @@ class Tab(View):
 	def present(self):
 		self.newVC.title = self.name
 		self.newVC.navigationItem().rightBarButtonItems = self.right_button_items
-		tabVC.addTabWithViewController_(self.newVC)
+		shared.tabVC.addTabWithViewController_(self.newVC)
 
 
 class WebTab(Tab):
@@ -98,12 +99,12 @@ class WebTab(Tab):
 		]
 		self.newVC.navigationItem().titleView = SearchBar(self)
 		wv = WebView(self)
-		wv.loadRequest_(NSURLRequest.requestWithURL_(nsurl("https://google.com")))
+		wv.loadRequest_(shared.NSURLRequest.requestWithURL_(shared.nsurl("https://google.com")))
 		self.newVC.view = wv
 	
 	@on_main_thread
 	def customVC(self):
-		return create_objc_class(
+		return shared.create_objc_class(
 			"CustomViewController",
 			shared.ObjCClass("UIViewController"),
 			methods=[wtShare, wtGoBack, wtGoForward, searchBarSearchButtonClicked_],
@@ -136,4 +137,4 @@ def searchBarSearchButtonClicked_(_self, _cmd, _sb):
 			view.loadRequest_(shared.NSURLRequest.requestWithURL_(res.URL()))
 			searchbar.text = res.URL().absoluteString()
 		else:
-			view.loadRequest_(shared.NSURLRequest.requestWithURL_(nsurl('https://google.com/search?q=' + urllib.quote(term))))
+			view.loadRequest_(shared.NSURLRequest.requestWithURL_(shared.nsurl('https://google.com/search?q=' + urllib.quote(term))))

@@ -1,6 +1,7 @@
 """Methods relating to the console."""
 
 from . import shared
+from .shared import on_main_thread
 
 __all__ = [
 	"getConsoleFont",
@@ -12,13 +13,16 @@ def getConsoleFont():
 	"""Return the font name and size that is currently active for the console."""
 	
 	shared.consoleVC.view()
-	desc = consoleVC.outputFont().fontDescriptor()
+	desc = shared.consoleVC.outputFont().fontDescriptor()
 	font = [str(desc.objectForKey_(a)) for a in ("NSFontNameAttribute", "NSFontSizeAttribute")]
 	font[1] = int(font[1])
-	return font
+	return tuple(font)
 
 @on_main_thread
 def getDefaultFont():
 	"""Get the user default for console font."""
 	
-	return [str(userDefaults.stringForKey_("OutputFontName")), userDefaults.integerForKey_("OutputFontSize")]
+	return (
+		str(shared.userDefaults.stringForKey_("OutputFontName")),
+		shared.userDefaults.integerForKey_("OutputFontSize"),
+	)

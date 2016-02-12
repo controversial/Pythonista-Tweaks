@@ -1,6 +1,7 @@
 """Miscellaneous functions for controlling the app."""
 
 from . import shared
+from .shared import on_main_thread
 
 __all__ = [
 	"clearBadge",
@@ -12,7 +13,7 @@ __all__ = [
 @on_main_thread
 def setBadgeString(s):
 	"""Set the badge on the app icon to be a certain string."""
-	shared.app.setApplicationBadgeString_(badge)
+	shared.app.setApplicationBadgeString_(s)
 
 @on_main_thread
 def setBadgeNumber(i):
@@ -29,4 +30,4 @@ def clearBadge():
 def openURL(url):
 	"""Open a url in a way that works through appex. This is useful for using
 	URL schemes to open other apps with data gained from appex."""
-	shared.app._openURL_(nsurl(url))
+	shared.app._openURL_(shared.nsurl(url))
