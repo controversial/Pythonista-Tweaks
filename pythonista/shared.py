@@ -1,32 +1,10 @@
 import objc_util
 from objc_util import *
 
-__all__ = {
-	"NSDataDetector",
-	"NSURLRequest",
-	"NSUserDefaults",
-	"UIBarButtonItem",
-	"UISearchBar",
-	"WKWebView",
-	"app",
-	"consoleVC",
-	"rootVC",
-	"tabVC",
-	"userDefaults",
-} | {name for name in dir(objc_util) if not name.startswith("_")} - {
-	"ctypes",
-	"inspect",
-	"itertools",
-	"os",
-	"pp",
-	"re",
-	"string",
-	"sys",
-	"ui", 
-	"weakref",
-}
-__all__ = list(__all__)
-__all__.sort()
+__all__ = sorted(set('''app consoleVC NSDataDetector NSURLRequest NSUserDefaults
+rootVC tabVC UIBarButtonItem UISearchBar userDefaults WKWebView'''.split()) | {
+name for name in dir(objc_util) if not name.startswith('_')} - set('''ctypes
+inspect itertools os pp re string sys ui weakref'''.split()))
 
 NSDataDetector = ObjCClass("NSDataDetector")
 NSURLRequest = ObjCClass("NSURLRequest")
