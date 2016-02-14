@@ -1,7 +1,8 @@
 """Methods relating to the console."""
 
+from objc_util import on_main_thread
+
 from . import shared
-from .shared import on_main_thread
 
 __all__ = [
 	"getConsoleFont",

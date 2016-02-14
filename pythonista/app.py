@@ -1,7 +1,8 @@
 """Miscellaneous functions for controlling the app."""
 
+from objc_util import nsurl, on_main_thread
+
 from . import shared
-from .shared import on_main_thread
 
 __all__ = [
 	"clearBadge",
@@ -30,4 +31,4 @@ def clearBadge():
 def openURL(url):
 	"""Open a url in a way that works through appex. This is useful for using
 	URL schemes to open other apps with data gained from appex."""
-	shared.app._openURL_(shared.nsurl(url))
+	shared.app._openURL_(nsurl(url))
