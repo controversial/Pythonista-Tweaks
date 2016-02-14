@@ -3,8 +3,10 @@
 import dialogs
 import urllib
 
+from objc_util import ObjCInstance, ObjCInstanceMethod, create_objc_class, nsurl, on_main_thread, sel
+
 from . import shared
-from .shared import on_main_thread
+from .classes import NSDataDetector, NSURLRequest, UIBarButtonItem, UIButton, UIImage, UISearchBar, UIViewController, WKWebView
 
 __all__ = [
 	"Button",
@@ -20,27 +22,26 @@ __all__ = [
 
 @on_main_thread
 def Button(s):
-	return shared.UIButton.new().autorelease()
+	return UIButton.new().autorelease()
 
 @on_main_thread
 def WebView(s):
-	return shared.WKWebView.new().autorelease()
+	return WKWebView.new().autorelease()
 
 @on_main_thread
 def ButtonItem(s, image, action):
 	return (
-		shared.UIBarButtonItem
-		.alloc()
-		.initWithImage_style_target_action_(shared.UIImage.imageNamed_(image), 0, s.newVC, shared.sel(action))
+		UIBarButtonItem.alloc()
+		.initWithImage_style_target_action_(UIImage.imageNamed_(image), 0, s.newVC, sel(action))
 	)
 
 @on_main_thread
 def SearchBar(s):
-	sb = shared.UISearchBar.alloc().initWithFrame_(((0, 0), (200, 32)))
+	sb = UISearchBar.alloc().initWithFrame_(((0, 0), (200, 32)))
 	sb.searchBarStyle = 2
 	sb.placeholder = "Search or enter address"
 	sb.delegate = s.newVC
-	shared.ObjCInstanceMethod(sb, "setAutocapitalizationType:")(0)
+	ObjCInstanceMethod(sb, "setAutocapitalizationType:")(0)
 	
 	return sb
 
@@ -74,9 +75,9 @@ class Tab(View):
 	
 	@on_main_thread
 	def customVC(self):
-		return shared.create_objc_class(
+		return create_objc_class(
 			"CustomViewController",
-			shared.ObjCClass("UIViewController"),
+			UIViewController,
 			methods=[],
 			protocols=["OMTabContent"],
 		).new().autorelease()
@@ -99,14 +100,14 @@ class WebTab(Tab):
 		]
 		self.newVC.navigationItem().titleView = SearchBar(self)
 		wv = WebView(self)
-		wv.loadRequest_(shared.NSURLRequest.requestWithURL_(shared.nsurl("https://google.com")))
+		wv.loadRequest_(NSURLRequest.requestWithURL_(nsurl("https://google.com")))
 		self.newVC.view = wv
 	
 	@on_main_thread
 	def customVC(self):
-		return shared.create_objc_class(
+		return create_objc_class(
 			"CustomViewController",
-			shared.ObjCClass("UIViewController"),
+			UIViewController,
 			methods=[wtShare, wtGoBack, wtGoForward, searchBarSearchButtonClicked_],
 			protocols=["OMTabContent", "UISearchBarDelegate"],
 		).new().autorelease()
@@ -114,27 +115,27 @@ class WebTab(Tab):
 # actions
 
 def wtShare(_self, _cmd):
-	url = shared.ObjCInstance(_self).view().URL()
+	url = ObjCInstance(_self).view().URL()
 	if url:
 		dialogs.share_url(str(url.absoluteString()))
 	
 def wtGoBack(_self, _cmd):
-	shared.ObjCInstance(_self).view().goBack()
+	ObjCInstance(_self).view().goBack()
 
 def wtGoForward(_self, _cmd):
-	shared.ObjCInstance(_self).view().goForward()
+	ObjCInstance(_self).view().goForward()
 		
 def searchBarSearchButtonClicked_(_self, _cmd, _sb):
-	searchbar = shared.ObjCInstance(_sb)
+	searchbar = ObjCInstance(_sb)
 	term = str(searchbar.text())
 	searchbar.resignFirstResponder()
 	
 	if term:
-		det = shared.NSDataDetector.dataDetectorWithTypes_error_(1<<5, None)
+		det = NSDataDetector.dataDetectorWithTypes_error_(1<<5, None)
 		res = det.firstMatchInString_options_range_(term, 0, (0, len(term)))
-		view = shared.ObjCInstance(_self).view()
+		view = ObjCInstance(_self).view()
 		if res:
-			view.loadRequest_(shared.NSURLRequest.requestWithURL_(res.URL()))
+			view.loadRequest_(NSURLRequest.requestWithURL_(res.URL()))
 			searchbar.text = res.URL().absoluteString()
 		else:
-			view.loadRequest_(shared.NSURLRequest.requestWithURL_(shared.nsurl('https://google.com/search?q=' + urllib.quote(term))))
+			view.loadRequest_(NSURLRequest.requestWithURL_(nsurl('https://google.com/search?q=' + urllib.quote(term))))
